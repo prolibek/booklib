@@ -10,7 +10,7 @@ def send_activation_mail(mail, token, request):
 
     url = get_current_site(request=request)
     token = token
-    absolute_url = f'{url}/api/activate/{token}'
+    absolute_url = f'{url}/activate/{token}'
 
     subject = "BookLib account activation"
     message = f'To fully authorize your account, please, tap the following link: {absolute_url}'

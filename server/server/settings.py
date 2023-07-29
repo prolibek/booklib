@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-AUTH_USER_MODEL = 'api.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,7 +38,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -47,7 +47,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'api',
+    'users',
+    'books',
 ]
 
 MIDDLEWARE = [
@@ -136,10 +137,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ACCESS_TOKEN_EXPIRATION = 15
 REFRESH_TOKEN_EXPIRATION = 30
 
+# Email info
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# JWT auth stuff
 
 SECRET_KEY = os.environ.get('SECRET_KEY')

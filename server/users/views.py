@@ -128,5 +128,3 @@ class RefreshTokenAPIView(views.APIView):
             return Response({
                 'detail': str(e)
             })
-
-        # continue tomorrow bro relax play war thunder
