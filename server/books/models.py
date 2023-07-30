@@ -4,21 +4,27 @@ from django.contrib.auth import get_user_model
 # Every book has an author
 class Author(models.Model):
     first_name = models.CharField(max_length=63)
-    last_name = models.CharField(max_length=63)
+    last_name = models.CharField(max_length=63, null=True, blank=True)
 
-    biography = models.TextField()
+    biography = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 # Every book has its genre
 class Genre(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
 
 # Book itself
 class Book(models.Model):
     name = models.CharField(max_length=255)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
     annotation = models.TextField()
-    genres = models.ManyToManyField(Genre)
+    genres = models.ManyToManyField(Genre, null=True)
 
 # Book is divided on chapters and being uploaded by 
 # chapters

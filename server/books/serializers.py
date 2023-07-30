@@ -17,6 +17,7 @@ class GenreSerializer(serializers.ModelSerializer):
         model = models.Genre
         fields = '__all__'
 
-class BookChapterSerializer(serializers.ModelSerializer):
-    # It should include joint serializing of book and its chapters
-    pass 
+class ChapterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Chapter
+        fields = '__all__'
