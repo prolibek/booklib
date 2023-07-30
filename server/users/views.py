@@ -6,7 +6,7 @@ from rest_framework.response import Response
 
 from . import serializers, models, utils
 
-import jwt
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 class RegisterAPIView(views.APIView):
     def post(self, request):
@@ -53,7 +53,11 @@ class LoginAPIView(views.APIView):
         
         serializer = serializers.UserSerializer(instance=user)
 
-        access_token, refresh_token = utils.generate_jwt_tokens(user, request.data['device'])
+        # generating simplejwt tokens
+        tokens = RefreshToken.for_user(user)
+
+        refresh_token = str(tokens)
+        access_token = str(tokens.access_token)
 
         return Response({
             'user': serializer.data,
@@ -84,47 +88,10 @@ class ActivateAccountAPIView(views.APIView):
 
 class LogoutAPIView(views.APIView):
     def post(self, request):
-        # To accomplish logging out client should send user's email
-        email = request.data['email']
-        device = request.data['device']
+        serializer = serializers.LogoutSerializer(data=request.data)
 
-        user = models.CustomUser.objects.get(email=email)
-        # That means that logging out from one device will lead to logging out from all devices 
-        # Maybe I later I will rewrite it to cookie based JWT authentication
-        # Or just start to use simplejwt :(
-        tokens = models.RefreshToken.objects.filter(user=user, device=device)
-        tokens.delete()
-
-        return Response({ 'detail': f'Logout in {device} has been succesfully accomplished.' })
-
-# Should write a function that will automatically delete expired tokens
-
-# test later
-class RefreshTokenAPIView(views.APIView):
-    def post(self, request):
-        device = request.data['device']
-        refresh_token = request.data['refresh_token']
-        try: 
-            old_token = models.RefreshToken.objects.get(token=refresh_token, device=device)
-            old_token.delete()
-            decoded_token = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
-            id = decoded_token['id']
-            user = models.CustomUser.objects.get(id=id)
-            new_access_token, new_refresh_token = utils.generate_jwt_tokens(user, device)
-            return Response({
-                'access_token': new_access_token,
-                'refresh_token': new_refresh_token,
-                'detail': 'New access and refresh token have been succesfully generated!'
-            })
-        except jwt.ExpiredSignatureError:
-            return Response({
-                'detail': 'Refresh token has expired'
-            })
-        except (jwt.DecodeError, models.CustomUser.DoesNotExist):
-            return Response({
-                'detail': 'Invalid token error'
-            })
-        except Exception as e:
-            return Response({
-                'detail': str(e)
-            })
+        if serializer.is_valid():
+            serializer.save()
+            return Response({ 'detail': f'Logout has been succesfully accomplished.' })
+        else:
+            return Response(serializer.errors)
