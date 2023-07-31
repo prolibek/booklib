@@ -21,25 +21,31 @@ class Genre(models.Model):
 
 # Book itself
 class Book(models.Model):
-    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
     annotation = models.TextField()
     genres = models.ManyToManyField(Genre, null=True)
 
+    def __str__(self):
+        return self.title
+
 # Book is divided on chapters and being uploaded by 
 # chapters
-class Chapter(models.Model):
-    number = models.IntegerField()
-    name = models.CharField(max_length=255)
+class Section(models.Model):
+    title = models.CharField(max_length=255)
     content = models.TextField()
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return self.title
 
 # Users are able to leave a comment for every chapter of the book
 class ChapterComment(models.Model):
     content = models.TextField()
     author = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
-    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE)
 
 class ChapterCommentLike(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)

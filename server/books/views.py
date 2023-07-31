@@ -8,13 +8,13 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = models.Book.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request):
         book = self.get_object()
-        chapters = book.chapter_set.all().values()
+        sections = book.section_set.all().values()
         return Response(
             {
                 "book": serializers.BookSerializer(book).data,
-                "chapters": chapters,
+                "sections": sections,
             }
         )
 
