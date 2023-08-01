@@ -24,7 +24,9 @@ class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
     annotation = models.TextField()
-    genres = models.ManyToManyField(Genre, null=True)
+    genres = models.ManyToManyField(Genre, blank=True)
+    slug = models.SlugField(unique=True, null=True)
+    is_published = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -33,6 +35,7 @@ class Book(models.Model):
 # chapters
 class Section(models.Model):
     title = models.CharField(max_length=255)
+    order_id = models.IntegerField(default=0)
     content = models.TextField()
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
@@ -44,8 +47,9 @@ class Section(models.Model):
 class ChapterComment(models.Model):
     content = models.TextField()
     author = models.ForeignKey(get_user_model(), on_delete=models.DO_NOTHING)
+    chapter = models.ForeignKey(Section, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
 class ChapterCommentLike(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)

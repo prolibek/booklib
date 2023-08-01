@@ -1,15 +1,24 @@
-from rest_framework import views, viewsets, permissions
+from rest_framework import views, viewsets
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from . import serializers, models, permissions
+from django.shortcuts import get_object_or_404
+
+from . import serializers, models, permissions, filters
 
 class BookViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BookSerializer
     queryset = models.Book.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
+    lookup_field = 'slug'
+    filter_backends = ( filters.PublishedBooksFilterBackend, )
 
-    def retrieve(self, request):
-        book = self.get_object()
+    def retrieve(self, request, *args, **kwargs):
+        value = kwargs.get("slug")
+        try: 
+            book = models.Book.objects.get(slug=value)
+        except:
+            book = models.Book.objects.get(pk=int(value))
         sections = book.section_set.all().values()
         return Response(
             {
@@ -17,6 +26,12 @@ class BookViewSet(viewsets.ModelViewSet):
                 "sections": sections,
             }
         )
+
+class SectionViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.SectionSerializer
+    queryset = models.Section.objects.all()
+    permission_classes = ( permissions.IsAdminOrReadOnly, )
+    http_method_names = ( 'post', 'put', 'patch', 'delete' )
 
 class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.GenreSerializer

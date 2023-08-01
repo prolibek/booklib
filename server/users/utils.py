@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 
-import os, jwt, datetime
+import os, datetime
 
 from .models import RefreshToken
 

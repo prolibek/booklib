@@ -6,9 +6,10 @@ from . import views
 
 router = DefaultRouter()
 
-router.register(r'book', views.BookViewSet)
-router.register(r'genre', views.GenreViewSet)
-router.register(r'author', views.AuthorViewSet)
+router.register(r'books', views.BookViewSet)
+router.register(r'genres', views.GenreViewSet)
+router.register(r'authors', views.AuthorViewSet)
+router.register(r'sections', views.SectionViewSet, basename='sections')
 
 urlpatterns = [
     path('', include(router.urls)),

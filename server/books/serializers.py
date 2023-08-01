@@ -17,7 +17,7 @@ class GenreSerializer(serializers.ModelSerializer):
         model = models.Genre
         fields = '__all__'
 
-class ChapterSerializer(serializers.ModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Chapter
+        model = models.Section
         fields = '__all__'
