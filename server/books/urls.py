@@ -13,5 +13,8 @@ router.register(r'sections', views.SectionViewSet, basename='sections')
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('books/<slug:slug>/sections', views.BookViewSet.as_view({'get':'sections'}), name='book-sections')
+    path('books/<slug:slug>/sections/', views.BookViewSet.as_view({'get':'sections'}), name='book-sections'),
+    path('books/<slug:slug>/overviews/', views.BookViewSet.as_view({'get':'overviews'}), name='book-overviews'),
+    path('books/<slug:slug>/books/', views.BookViewSet.as_view({'get':'books'}), name='author-books'),
+    path('books/<slug:slug>/books/', views.BookViewSet.as_view({'get':'books'}), name='genres-books'),
 ]

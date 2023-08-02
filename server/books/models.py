@@ -7,6 +7,7 @@ class Author(models.Model):
     last_name = models.CharField(max_length=63, null=True, blank=True)
     portrait = models.ImageField(upload_to='portraits/', null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -15,6 +16,7 @@ class Author(models.Model):
 class Genre(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
+    slug = models.SlugField(unique=True, null=True)
 
     def __str__(self):
         return self.name

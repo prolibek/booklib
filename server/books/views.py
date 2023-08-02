@@ -8,16 +8,16 @@ from django.shortcuts import get_object_or_404
 from . import serializers, models, permissions, filters
 
 # book utils
-def get_book_by_slug(slug):
+def get_object_by_slug(model, slug):
     try: 
-        book = models.Book.objects.get(slug=slug)
+        book = model.objects.get(slug=slug)
     except:
-        book = models.Book.objects.get(pk=int(slug))
+        book = model.objects.get(pk=int(slug))
     return book
 
 def check_book_permissions(func):
     def wrapper(self, request, *args, **kwargs):
-        book = get_book_by_slug(kwargs['slug'])
+        book = get_object_by_slug(models.Book, kwargs['slug'])
         if not (book.is_published or request.user.is_staff):
             return Response({
                 "detail": "Access forbidden"
@@ -63,18 +63,65 @@ class BookViewSet(viewsets.ModelViewSet):
             }
         )
 
-class SectionViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.SectionSerializer
-    queryset = models.Section.objects.all()
+class AuthorViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.AuthorSerializer
+    queryset = models.Author.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
-    http_method_names = ( 'post', 'put', 'patch', 'delete' )
+    lookup_field = 'slug'
+
+    def retrieve(self, request, *args, **kwargs):
+        author = get_object_by_slug(models.Author, kwargs['slug'])
+        return Response(
+            {
+                "author": serializers.AuthorSerializer(author).data,
+            }
+        )
+
+    @action(detail=True, methods=['GET'])
+    def books(self, request, *args, **kwargs):
+        author = get_object_by_slug(models.Author, kwargs['slug'])
+        if not (request.user.is_staff):
+            books = author.book_set.filter(is_published=True).all().values()
+        else: 
+            books = author.book_set.all().values()
+        return Response(
+            {
+                "author": serializers.AuthorSerializer(author).data,
+                "books": books,
+            }
+        )
 
 class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.GenreSerializer
     queryset = models.Genre.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
+    lookup_field = 'slug'
 
-class AuthorViewSet(viewsets.ModelViewSet):
-    serializer_class = serializers.AuthorSerializer
-    queryset = models.Author.objects.all()
+    def retrieve(self, request, *args, **kwargs):
+        genre = get_object_by_slug(models.Genre, kwargs['slug'])
+        return Response(
+            {
+                "genre": serializers.GenreSerializer(genre).data,
+            }
+        )
+
+    @action(detail=True, methods=['GET'])
+    def books(self, request, *args, **kwargs):
+        genre = get_object_by_slug(models.Genre, kwargs['slug'])
+        if not (request.user.is_staff):
+            books = genre.book_set.filter(is_published=True).all().values()
+        else: 
+            books = genre.book_set.all().values()
+        return Response(
+            {
+                "genre": serializers.GenreSerializer(genre).data,
+                "books": books,
+            }
+        )
+    
+# This viewset is only used to create new sections
+class SectionViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.SectionSerializer
+    queryset = models.Section.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
+    http_method_names = ( 'post', 'put', 'patch', 'delete' )
