@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 class Author(models.Model):
     first_name = models.CharField(max_length=63)
     last_name = models.CharField(max_length=63, null=True, blank=True)
-
+    portrait = models.ImageField(upload_to='portraits/', null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -23,6 +23,7 @@ class Genre(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
+    poster = models.ImageField(upload_to='posters/', null=True, blank=True)
     annotation = models.TextField()
     genres = models.ManyToManyField(Genre, blank=True)
     slug = models.SlugField(unique=True, null=True)

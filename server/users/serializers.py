@@ -22,8 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
 
         if password is not None:
             instance.set_password(password)
-        
+
         instance.save()
+
+        models.Rank.objects.create(user=instance)
+        
         return instance
 
 class LogoutSerializer(serializers.Serializer):

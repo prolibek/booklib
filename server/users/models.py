@@ -7,6 +7,8 @@ class CustomUser(AbstractUser):
     email = models.CharField(unique=True, max_length=255)
     username = models.CharField(unique=True, max_length=16)
 
+    avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
+
     first_name = models.CharField(max_length=30, null=True)
     last_name = models.CharField(max_length=63, null=True)
 
@@ -16,6 +18,16 @@ class CustomUser(AbstractUser):
 
     USERNAME_FIELD = 'username'
     EMAIL_FIELD = 'email'
+
+class Rank(models.Model):
+    score = models.IntegerField(default=0)
+    rank = models.IntegerField(default=1)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    def update_rank(self):
+        if pow(2, (self.rank - 1)) * 100 <= self.score:
+            self.rank += 1
+            self.save()
 
 class RefreshToken(models.Model):
     token = models.CharField(max_length=255, unique=True)

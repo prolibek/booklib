@@ -92,6 +92,6 @@ class LogoutAPIView(views.APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response({ 'detail': f'Logout has been succesfully accomplished.' })
+            return Response({ 'detail': 'Logout has been succesfully accomplished.' })
         else:
             return Response(serializer.errors)
