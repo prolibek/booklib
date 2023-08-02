@@ -11,9 +11,9 @@ from . import serializers, models, permissions, filters
 # book utils
 def get_object_by_slug(model, slug):
     try: 
-        obj = model.objects.get(slug=slug) 
+        obj = get_object_or_404(model, slug=slug) 
     except:
-        obj = model.objects.get(pk=int(slug))
+        obj = get_object_or_404(model, pk=int(slug))
     return obj
 
 def check_book_permissions(func):
@@ -26,15 +26,6 @@ def check_book_permissions(func):
         return func(self, request, book, *args, **kwargs)
     return wrapper
 
-def handle_object_not_found(func):
-    def wrapper(self, request, *args, **kwargs):
-        try:
-            return func(self, request, *args, **kwargs)
-        except ObjectDoesNotExist:
-            return Response({
-                "detail": "Not found"
-            })
-    return wrapper
 # end book utils
 
 class BookViewSet(viewsets.ModelViewSet):
@@ -44,7 +35,6 @@ class BookViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     filter_backends = ( filters.PublishedBooksFilterBackend, )
     
-    @handle_object_not_found
     @check_book_permissions
     def retrieve(self, request, book, *args, **kwargs):
         return Response(
@@ -53,7 +43,6 @@ class BookViewSet(viewsets.ModelViewSet):
             }
         ) 
 
-    @handle_object_not_found
     @check_book_permissions
     @action(detail=True, methods=['GET'])
     def sections(self, request, book, *args, **kwargs):
@@ -65,7 +54,6 @@ class BookViewSet(viewsets.ModelViewSet):
             }
         )
 
-    @handle_object_not_found
     @check_book_permissions
     @action(detail=True, methods=['GET'])
     def overviews(self, request, book, *args, **kwargs):
@@ -83,7 +71,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = ( permissions.IsAdminOrReadOnly, )
     lookup_field = 'slug'
 
-    @handle_object_not_found
     def retrieve(self, request, *args, **kwargs):
         author = get_object_by_slug(models.Author, kwargs['slug'])
         return Response(
@@ -92,7 +79,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
             }
         )
 
-    @handle_object_not_found
     @action(detail=True, methods=['GET'])
     def books(self, request, *args, **kwargs):
         author = get_object_by_slug(models.Author, kwargs['slug'])
@@ -113,7 +99,6 @@ class GenreViewSet(viewsets.ModelViewSet):
     permission_classes = ( permissions.IsAdminOrReadOnly, )
     lookup_field = 'slug'
 
-    @handle_object_not_found
     def retrieve(self, request, *args, **kwargs):
         genre = get_object_by_slug(models.Genre, kwargs['slug'])
         return Response(
@@ -122,7 +107,6 @@ class GenreViewSet(viewsets.ModelViewSet):
             }
         )
 
-    @handle_object_not_found
     @action(detail=True, methods=['GET'])
     def books(self, request, *args, **kwargs):
         genre = get_object_by_slug(models.Genre, kwargs['slug'])
