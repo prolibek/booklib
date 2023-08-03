@@ -25,7 +25,7 @@ class RegisterAPIView(views.APIView):
 
                 utils.send_activation_mail(email, activation_token.pk, request)
 
-                data['detail'] = 'Activation email was succesfully sent'
+                data['detail'] = 'Activation email was succesfully sent.'
             except Exception as e: 
                 data['detail'] = str(e)
 
@@ -75,11 +75,11 @@ class ActivateAccountAPIView(views.APIView):
             activation_token.delete()
             user.save()
             return Response({
-                'detail': 'Account has been succesfully activated'
+                'detail': 'Account has been succesfully activated.'
             }, status=status.HTTP_200_OK)
         except models.ActivationToken.DoesNotExist: 
             return Response({
-                'detail': 'Activation token has expired or does not exist'
+                'detail': 'Activation token has expired or does not exist.'
             }, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({

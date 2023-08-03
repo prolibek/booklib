@@ -16,7 +16,7 @@ def check_book_permissions(func):
         book = get_object_or_404(models.Book, pk=pk)
         if not (book.is_published or request.user.is_staff):
             return Response({
-                "detail": "Access forbidden"
+                "detail": "Access forbidden."
             }, status=status.HTTP_403_FORBIDDEN)
         return func(self, request, book, pk)
     return wrapper
@@ -35,7 +35,7 @@ class BookViewSet(viewsets.ModelViewSet):
             {
                 "book": serializers.BookSerializer(book).data,
             }, status=status.HTTP_200_OK
-        ) 
+        )
 
     @check_book_permissions
     @action(detail=True, methods=['GET'])
@@ -64,14 +64,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
     queryset = models.Author.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
 
-    def retrieve(self, request, pk=None):
-        author = get_object_or_404(models.Author, id=pk)
-        return Response(
-            {
-                "author": serializers.AuthorSerializer(author).data,
-            }, status=status.HTTP_200_OK
-        )
-
     @action(detail=True, methods=['GET'])
     def books(self, request, pk=None):
         author = get_object_or_404(models.Author, id=pk)
@@ -91,13 +83,6 @@ class GenreViewSet(viewsets.ModelViewSet):
     queryset = models.Genre.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
 
-    def retrieve(self, request, pk=None):
-        genre = get_object_or_404(models.Genre, id=pk)
-        return Response(
-            {
-                "genre": serializers.GenreSerializer(genre).data,
-            }, status=status.HTTP_200_OK
-        )
 
     @action(detail=True, methods=['GET'])
     def books(self, request, pk=None):
