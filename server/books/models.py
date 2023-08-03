@@ -29,6 +29,7 @@ class Book(models.Model):
     annotation = models.TextField()
     genres = models.ManyToManyField(Genre, blank=True)
     slug = models.SlugField(unique=True, null=True)
+    epub = models.FileField(upload_to='epub/', null=True, blank=True)
     is_published = models.BooleanField(default=False)
 
     def __str__(self):
@@ -38,7 +39,6 @@ class Book(models.Model):
 # chapters
 class Section(models.Model):
     title = models.CharField(max_length=255)
-    order_id = models.IntegerField(default=0)
     content = models.TextField()
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
