@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.conf import settings
 
-from rest_framework import viewsets, views
+from rest_framework import viewsets, views, status
 from rest_framework.response import Response
 
 from . import serializers, models, utils
@@ -29,9 +29,9 @@ class RegisterAPIView(views.APIView):
             except Exception as e: 
                 data['detail'] = str(e)
 
-            return Response(data)
+            return Response(data, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(views.APIView):
     def post(self, request):
@@ -46,10 +46,10 @@ class LoginAPIView(views.APIView):
             try:
                 user = models.CustomUser.objects.get(username=login_id)
             except:
-                return Response({ 'detail': 'User not found.' })
+                return Response({ 'detail': 'User not found.' }, status=status.HTTP_401_UNAUTHORIZED)
         
         if not user.check_password(password):
-            return Response({ 'detail': 'Password is incorrect.' })
+            return Response({ 'detail': 'Password is incorrect.' }, status=status.HTTP_401_UNAUTHORIZED)
         
         serializer = serializers.UserSerializer(instance=user)
 
@@ -76,15 +76,15 @@ class ActivateAccountAPIView(views.APIView):
             user.save()
             return Response({
                 'detail': 'Account has been succesfully activated'
-            })
+            }, status=status.HTTP_200_OK)
         except models.ActivationToken.DoesNotExist: 
             return Response({
                 'detail': 'Activation token has expired or does not exist'
-            })
+            }, status=status.HTTP_403_FORBIDDEN)
         except Exception as e:
             return Response({
                 'detail': str(e)
-            })
+            }, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutAPIView(views.APIView):
     def post(self, request):
@@ -92,6 +92,12 @@ class LogoutAPIView(views.APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return Response({ 'detail': 'Logout has been succesfully accomplished.' })
+            return Response(
+                { 'detail': 'Logout has been succesfully accomplished.' }, 
+                status=status.HTTP_200_OK
+            )
         else:
-            return Response(serializer.errors)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )

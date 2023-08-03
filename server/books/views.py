@@ -1,4 +1,4 @@
-from rest_framework import views, viewsets
+from rest_framework import views, viewsets, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -17,7 +17,7 @@ def check_book_permissions(func):
         if not (book.is_published or request.user.is_staff):
             return Response({
                 "detail": "Access forbidden"
-            })
+            }, status=status.HTTP_403_FORBIDDEN)
         return func(self, request, book, pk)
     return wrapper
 
@@ -26,7 +26,7 @@ def check_book_permissions(func):
 class BookViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BookSerializer
     queryset = models.Book.objects.all()
-    permission_classes = ( permissions.IsAdminOrReadOnly )
+    permission_classes = ( permissions.IsAdminOrReadOnly, )
     filter_backends = ( filters.PublishedBooksFilterBackend, )
     
     @check_book_permissions
@@ -34,7 +34,7 @@ class BookViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 "book": serializers.BookSerializer(book).data,
-            }
+            }, status=status.HTTP_200_OK
         ) 
 
     @check_book_permissions
@@ -45,7 +45,7 @@ class BookViewSet(viewsets.ModelViewSet):
             {
                 "book": serializers.BookSerializer(book).data,
                 "sections": sections,
-            }
+            }, status=status.HTTP_200_OK
         )
 
     @check_book_permissions
@@ -56,7 +56,7 @@ class BookViewSet(viewsets.ModelViewSet):
             {
                 "book": serializers.BookSerializer(book).data,
                 "overviews": overviews,
-            }
+            }, status=status.HTTP_200_OK
         )
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -69,7 +69,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 "author": serializers.AuthorSerializer(author).data,
-            }
+            }, status=status.HTTP_200_OK
         )
 
     @action(detail=True, methods=['GET'])
@@ -83,7 +83,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
             {
                 "author": serializers.AuthorSerializer(author).data,
                 "books": books,
-            }
+            }, status=status.HTTP_200_OK
         )
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -96,7 +96,7 @@ class GenreViewSet(viewsets.ModelViewSet):
         return Response(
             {
                 "genre": serializers.GenreSerializer(genre).data,
-            }
+            }, status=status.HTTP_200_OK
         )
 
     @action(detail=True, methods=['GET'])
@@ -110,7 +110,7 @@ class GenreViewSet(viewsets.ModelViewSet):
             {
                 "genre": serializers.GenreSerializer(genre).data,
                 "books": books,
-            }
+            }, status=status.HTTP_200_OK
         )
     
 # This viewset is only used to create new sections

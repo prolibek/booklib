@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 
 from .models import Book, Section
 
+# .epub format parser utils
+# These functions help to replicate tree-like structure of book content 
+
 def get_chapter_content(book, href):
     
     chapter = book.get_item_with_href(href)
@@ -22,6 +25,10 @@ def get_chapter_content(book, href):
 
 def create_section_recursively(items, book, obj, parent=None):
     for item in items:
+        # Items here can be two types <Link, Link[]> or just Link
+        
+        # If it is just link without child links, it should be the
+        # lowest level in sections hierarchy
         if isinstance(item, epub.Link):
             content = get_chapter_content(book, item.href)
             Section.objects.create(
@@ -37,6 +44,7 @@ def create_section_recursively(items, book, obj, parent=None):
                 parent=parent,
                 book=obj
             )
+            # We pass section to make it parent for subsections
             create_section_recursively(subsections, book, obj, section)
 
 
