@@ -12,7 +12,7 @@ from . import serializers, models, permissions, filters
 
 def check_book_permissions(func):
     def wrapper(self, request, *args, **kwargs):
-        pk = kwargs['pk']
+        pk = kwargs['id']
         book = get_object_or_404(models.Book, pk=pk)
         if not (book.is_published or request.user.is_staff):
             return Response({
@@ -28,6 +28,7 @@ class BookViewSet(viewsets.ModelViewSet):
     queryset = models.Book.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
     filter_backends = ( filters.PublishedBooksFilterBackend, )
+    lookup_field = 'id'
     
     @check_book_permissions
     def retrieve(self, request, book, pk=None):
@@ -65,8 +66,8 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = ( permissions.IsAdminOrReadOnly, )
 
     @action(detail=True, methods=['GET'])
-    def books(self, request, pk=None):
-        author = get_object_or_404(models.Author, id=pk)
+    def books(self, request, authorId=None):
+        author = get_object_or_404(models.Author, id=authorId)
         if not (request.user.is_staff):
             books = author.book_set.filter(is_published=True).all().values()
         else: 
@@ -83,10 +84,9 @@ class GenreViewSet(viewsets.ModelViewSet):
     queryset = models.Genre.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
 
-
     @action(detail=True, methods=['GET'])
-    def books(self, request, pk=None):
-        genre = get_object_or_404(models.Genre, id=pk)
+    def books(self, request, genreId=None):
+        genre = get_object_or_404(models.Genre, id=genreId)
         if not (request.user.is_staff):
             books = genre.book_set.filter(is_published=True).all().values()
         else: 
