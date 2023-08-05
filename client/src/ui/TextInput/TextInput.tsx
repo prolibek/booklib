@@ -1,15 +1,16 @@
 import React from 'react';
 
-import styles from './StronglyRoundedInput.module.css';
+import styles from './TextInput.module.css';
 
 interface SearchBoxProps {
     width?: string;
     height?: string;
     fontSize?: string;
     text?: string;
+    children?: React.ReactNode;
 }
 
-const StronglyRoundedInput: React.FC<SearchBoxProps> = 
+const TextInput: React.FC<SearchBoxProps> = 
     ({
         width, 
         height, 
@@ -25,4 +26,4 @@ const StronglyRoundedInput: React.FC<SearchBoxProps> =
     );
 };
 
-export default StronglyRoundedInput;
+export default TextInput;

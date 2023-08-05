@@ -1,0 +1,17 @@
+.button {
+    border-radius: 20px;
+    border: 2px solid #4D2900;
+    background-color: transparent;
+    transition: .5s;
+}
+
+.button:hover {
+    background-color: #bc4e00;
+    border: 2px solid #bc4e00;
+    cursor: pointer;
+}
+
+.button:hover * {
+    color: white;
+    transition: 0s;
+}

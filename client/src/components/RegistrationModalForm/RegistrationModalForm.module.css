@@ -1,0 +1,24 @@
+.grayText {
+    color: #535353;
+    font-size: 16px;
+}
+
+.inputWithText {
+    margin-top: 20px;
+}
+
+.inputWithText > p {
+    margin-bottom: 10px;
+}
+
+.buttonWithText {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonWithText > button {
+    margin-bottom: 15px;
+}

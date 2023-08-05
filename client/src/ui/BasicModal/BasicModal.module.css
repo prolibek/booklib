@@ -1,0 +1,30 @@
+.Modal {
+    position: fixed;
+    top: 0; bottom: 0; left: 0; right: 0;
+    display: none;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.Modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ModalContent {
+    border-radius: 10px;
+    background-color: white;
+    padding: 40px;
+}
+
+.closeButton {
+    font-size: 24px;
+    float: right;
+    margin-top: -30px;
+    margin-right: -20px;
+}
+
+.closeButton:hover,
+.closeButton:focus {
+    cursor: pointer;
+}

@@ -9,3 +9,7 @@
     font-family: 'Roboto', sans-serif;
     color: #B9B9B9;
 }
+
+.input:focus {
+    padding-left: 20px;
+}
