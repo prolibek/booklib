@@ -22,3 +22,12 @@
 .buttonWithText > button {
     margin-bottom: 15px;
 }
+
+.changeModal {
+    color: #0654AD;
+    border-bottom: #0654AD 1.5px solid;
+}
+
+.changeModal:hover {
+    cursor: pointer;
+}

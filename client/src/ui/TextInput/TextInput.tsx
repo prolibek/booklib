@@ -7,6 +7,7 @@ interface SearchBoxProps {
     height?: string;
     fontSize?: string;
     text?: string;
+    borderRadius?: string;
     children?: React.ReactNode;
 }
 
@@ -15,12 +16,13 @@ const TextInput: React.FC<SearchBoxProps> =
         width, 
         height, 
         fontSize, 
-        text
+        text,
+        borderRadius
     }) => {
     return (
         <input
             placeholder={text}
-            style={{width, height, fontSize}}
+            style={{width, height, fontSize, borderRadius}}
             className={styles.input}
         />
     );

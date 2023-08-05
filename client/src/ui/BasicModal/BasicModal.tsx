@@ -23,8 +23,15 @@ const BasicModal: React.FC<BasicModalProps> =
     if(visible) rootStyles.push(styles.active)
     
     return (
-        <div className={rootStyles.join(' ')}>
-            <div style={{width, height}} className={styles.ModalContent}>
+        <div 
+            className={rootStyles.join(' ')}
+            onClick={ () => { setVisible(false) } }
+        >
+            <div 
+                style={{width, height}} 
+                className={styles.ModalContent}
+                onClick={ (e) => { e.stopPropagation() } }
+            >
                 <div 
                     className={styles.closeButton}
                     onClick={() => setVisible(false)}

@@ -2,12 +2,14 @@ import styles from './Header.module.css';
 import Logo from '~/ui/Logo/Logo';
 import BrownText from "~/ui/BrownText/BrownText";
 import TextInput from '~/ui/TextInput/TextInput';
-import RegistrationModal from '../RegistrationModalForm/RegistrationModalForm';
+import RegistrationModal from '../AuthModal/RegistrationModalForm';
+import LoginModal from '../AuthModal/LoginModalForm';
 import { useState } from 'react';
 
 const Header = () => {
 
-    const [modal, setModal] = useState(false);
+    const [regModal, setRegModal] = useState(false);
+    const [loginModal, setLoginModal] = useState(false);
 
     return (
         <div className={styles.header}>
@@ -21,15 +23,22 @@ const Header = () => {
                 
             >
                 <a onClick = {() => { 
-                    setModal(true); 
+                    setLoginModal(true); 
                     console.log("Hi");
                 }}>Войти</a>
             </BrownText>
 
             <RegistrationModal 
-                visible={modal} 
-                setVisible={setModal}
+                visible={regModal} 
+                setVisible={setRegModal}
+                setLoginVisible={setLoginModal}
             />
+            <LoginModal
+                visible={loginModal}
+                setVisible={setLoginModal}
+                setRegVisible={setRegModal}
+            />
+
         </div> 
     );
 };
