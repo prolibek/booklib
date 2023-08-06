@@ -5,9 +5,17 @@ interface IAuthState {
     isAuthenticated: boolean;
 }
 
+
 const initialState: IAuthState = {
     token: null,
     isAuthenticated: false,
+}
+
+const token = localStorage.getItem('access_token');
+
+if (token) {
+    initialState.token = token;
+    initialState.isAuthenticated = true;
 }
 
 const authSlice = createSlice({
