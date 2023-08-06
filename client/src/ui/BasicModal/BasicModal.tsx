@@ -25,12 +25,18 @@ const BasicModal: React.FC<BasicModalProps> =
     return (
         <div 
             className={rootStyles.join(' ')}
-            onClick={ () => { setVisible(false) } }
+            onMouseDown={ (e) => { 
+                if (e.button == 2) {
+                    e.preventDefault();
+                    return ;
+                }
+                setVisible(false)
+            } }
         >
             <div 
                 style={{width, height}} 
                 className={styles.ModalContent}
-                onClick={ (e) => { e.stopPropagation() } }
+                onMouseDown={ (e) => { e.stopPropagation() } }
             >
                 <div 
                     className={styles.closeButton}

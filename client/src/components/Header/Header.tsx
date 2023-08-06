@@ -5,11 +5,15 @@ import TextInput from '~/ui/TextInput/TextInput';
 import RegistrationModal from '../AuthModal/RegistrationModalForm';
 import LoginModal from '../AuthModal/LoginModalForm';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'react-redux';
 
 const Header = () => {
 
     const [regModal, setRegModal] = useState(false);
     const [loginModal, setLoginModal] = useState(false);
+
+    const authState = useSelector((state: RootState) => state.auth);
 
     return (
         <div className={styles.header}>
@@ -19,13 +23,18 @@ const Header = () => {
                 <BrownText><a>Библиотека</a></BrownText>
                 <BrownText><a>Админка</a></BrownText>
             </div>
-            <BrownText
-                
-            >
-                <a onClick = {() => { 
-                    setLoginModal(true); 
-                    console.log("Hi");
-                }}>Войти</a>
+            <BrownText>
+                {authState.isAuthenticated ? (
+                    <a>Выйти</a>
+                ) : (
+                    <a
+                    onClick={() => {
+                        setLoginModal(true);
+                    }}
+                    >
+                    Войти
+                    </a>
+                )}
             </BrownText>
 
             <RegistrationModal 

@@ -16,7 +16,6 @@ class RegisterAPIView(views.APIView):
          
         if serializer.is_valid():
             serializer.save()
-            data['user'] = serializer.data
             try:
                 email=request.data['email']
 
@@ -26,11 +25,18 @@ class RegisterAPIView(views.APIView):
                 utils.send_activation_mail(email, activation_token.pk, request)
 
                 data['detail'] = 'Activation email was succesfully sent.'
+
+                tokens = RefreshToken.for_user(user)
+
+                data['refresh_token'] = str(tokens)
+                data['access_token'] = str(tokens.access_token)
+
             except Exception as e: 
                 data['detail'] = str(e)
 
             return Response(data, status=status.HTTP_200_OK)
         else:
+            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(views.APIView):
@@ -60,7 +66,6 @@ class LoginAPIView(views.APIView):
         access_token = str(tokens.access_token)
 
         return Response({
-            'user': serializer.data,
             'access_token': access_token,
             'refresh_token': refresh_token
         })

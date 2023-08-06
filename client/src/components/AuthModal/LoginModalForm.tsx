@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+
+import authService from "../../services/authService";
+import { login } from "../../features/auth/authSlice";
+
 import BasicModal from "~/ui/BasicModal/BasicModal";
 import TextInput from "~/ui/TextInput/TextInput";
 import Button from "~/ui/Button/Button";
 import BrownText from "~/ui/BrownText/BrownText";
 import styles from './AuthModal.module.css';
+import { useDispatch } from "react-redux";
 
 interface LoginModalProps {
     visible: boolean;
@@ -17,6 +22,26 @@ const LoginModal: React.FC<LoginModalProps> =
         setVisible,
         setRegVisible
     }) => {
+
+    const dispatch = useDispatch();
+
+    const [loginValue, setLoginValue] = useState("");
+    const [passwordValue, setPasswordValue] = useState("");
+
+    const handleLogin = async () => {
+        try {
+            const response = await authService.login({
+                login_id: loginValue,
+                password: passwordValue
+            })
+            const token = response.access_token;
+            console.log(token);
+            dispatch(login({access_token: token}));
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <BasicModal 
             visible={visible} 
@@ -33,15 +58,37 @@ const LoginModal: React.FC<LoginModalProps> =
             </p>
             <div className={styles.inputWithText}>
                 <p className={styles.grayText}>Почта или никнейм:</p>
-                <TextInput borderRadius="10px" fontSize="16px" width="100%" height="45px"/>
+                <TextInput 
+                    value={loginValue} 
+                    handleChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginValue(e.target.value)} 
+                    borderRadius="10px" 
+                    fontSize="16px" 
+                    width="100%" 
+                    height="45px"
+                />
             </div>
             <div className={styles.inputWithText}>
                 <p className={styles.grayText}>Пароль:</p>
-                <TextInput borderRadius="10px" fontSize="16px" width="100%" height="45px"/>
+                <TextInput 
+                    value={passwordValue} 
+                    handleChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordValue(e.target.value)} 
+                    borderRadius="10px" 
+                    fontSize="16px" 
+                    width="100%" 
+                    height="45px"
+                />
             </div>
             <div className={styles.buttonWithText}>
-                <Button width="100%" height="48px">
-                    <BrownText borderRadius="10px" fontSize="18px">Зарегистрироваться</BrownText>
+                <Button 
+                    width="100%" 
+                    height="48px"
+                    click={() => {
+                        console.log("Bob")
+                        setVisible(false)
+                        handleLogin()
+                    }}
+                >
+                    <BrownText borderRadius="10px" fontSize="18px">Войти</BrownText>
                 </Button>
                 <p>Ещё не зарегистрированы? <a 
                     className={styles.changeModal}

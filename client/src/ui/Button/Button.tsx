@@ -3,6 +3,7 @@ import React from "react";
 import styles from './Button.module.css';
 
 interface ButtonProps {
+    click?: () => void;
     width?: string;
     height?: string;
     children?: React.ReactNode;
@@ -10,12 +11,13 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = 
     ({
+        click,
         width,
         height,
         children
     }) => {
         return (
-            <button style={{width, height}} className={styles.button}>
+            <button onClick={click} style={{width, height}} className={styles.button}>
                 {children}
             </button>
         )
