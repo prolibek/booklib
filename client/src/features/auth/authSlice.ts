@@ -25,12 +25,14 @@ const authSlice = createSlice({
         login: (state, action) => {
             state.token = action.payload;
             state.isAuthenticated = true;
-            localStorage.setItem('access_token', action.payload);
+            localStorage.setItem('access_token', action.payload['access_token']);
+            localStorage.setItem('refresh_token', action.payload['refresh_token']);
         },
-        logout: (state, action) => {
-            state.token = action.payload;
+        logout: (state) => {
+            state.token = null;
             state.isAuthenticated = false;
             localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
         },
     },
 })

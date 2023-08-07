@@ -36,8 +36,12 @@ const RegistrationModal: React.FC<RegistrationModalProps> =
                 username: usernameValue,
                 password: passwordValue
             })
-            console.log(response)
-            dispatch(login(response));
+            const access_token = response.access_token;
+            const refresh_token = response.refresh_token;
+            dispatch(login({
+                access_token, 
+                refresh_token
+            }));
         } catch (error) {
             throw new Error("error");
         }

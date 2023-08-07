@@ -11,7 +11,7 @@ interface RegisterData {
     password: string;
 }
 
-interface LogoutData {
+interface RefreshData {
     refresh: string;
 }
 
@@ -19,6 +19,11 @@ interface AuthResponse {
     access_token: string;
     refresh_token: string;
     detail?: string;
+}
+
+interface RefreshResponse {
+    access: string;
+    refresh: string;
 }
 
 const AuthService = {
@@ -40,12 +45,21 @@ const AuthService = {
         }
     },
 
-    logout: async (data: LogoutData) : Promise <void> => {
+    logout: async (data: RefreshData) : Promise <void> => {
         try {
             const response = await $api.post("users/logout/", data);
             return response.data;
         } catch (error) {
             throw new Error("Ошибка выхода.");
+        }
+    },
+
+    refresh: async (data: RefreshData) : Promise <RefreshResponse> => {
+        try {
+            const response = await $api.post("users/refresh/", data);
+            return response.data;
+        } catch (error) {
+            throw new Error("Ошибка обновления сессии.");
         }
     }
 };

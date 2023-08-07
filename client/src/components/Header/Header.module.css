@@ -19,3 +19,12 @@
     align-items: center;
     gap: 3.3vw;
 }
+
+.navText {
+    transition: .3s;
+}
+
+.navText:hover {
+    cursor: pointer;
+    color: #bc4e00;
+}

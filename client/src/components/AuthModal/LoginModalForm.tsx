@@ -34,9 +34,12 @@ const LoginModal: React.FC<LoginModalProps> =
                 login_id: loginValue,
                 password: passwordValue
             })
-            const token = response.access_token;
-            console.log(token);
-            dispatch(login({access_token: token}));
+            const access_token = response.access_token;
+            const refresh_token = response.refresh_token;
+            dispatch(login({
+                access_token, 
+                refresh_token
+            }));
         } catch (error) {
             console.log(error);
         }
