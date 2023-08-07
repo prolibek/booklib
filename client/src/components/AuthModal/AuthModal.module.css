@@ -31,3 +31,9 @@
 .changeModal:hover {
     cursor: pointer;
 }
+
+.errorMessage {
+    color: rgb(101, 0, 0);
+    font-size: 16px;
+    margin-top: 5px;
+}

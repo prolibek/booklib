@@ -36,7 +36,7 @@ $api.interceptors.request.use(
                     const access = response.access;
                     dispatch(login({
                         access_token: access,
-                        refresh_token: refresh
+                        refresh_token: new_refresh
                     }))
                 } catch (error) {
 

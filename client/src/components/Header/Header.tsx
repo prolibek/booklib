@@ -30,7 +30,13 @@ const Header = () => {
     return (
         <div className={styles.header}>
             <Logo/>
-            <TextInput width="275px" height="40px" fontSize="16px" text="Начните искать"/>
+            <TextInput style={{
+                width: "275px", 
+                height: "40px", 
+                fontSize: "16px"
+            }}
+            text = "Начните искать"
+            />
             <div className={styles.navRows}>
                 <BrownText><a className={styles.navText}>Библиотека</a></BrownText>
                 <BrownText><a className={styles.navText}>Админка</a></BrownText>

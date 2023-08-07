@@ -3,23 +3,17 @@ import React from 'react';
 import styles from './TextInput.module.css';
 
 interface SearchBoxProps {
-    width?: string;
-    height?: string;
-    fontSize?: string;
-    text?: string;
-    borderRadius?: string;
+    style?: object;
     children?: React.ReactNode;
+    text?: string;
     value?: string;
     handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const TextInput: React.FC<SearchBoxProps> = 
     ({
-        width, 
-        height, 
-        fontSize, 
+        style, 
         text,
-        borderRadius,
         value,
         handleChange
     }) => {
@@ -28,7 +22,7 @@ const TextInput: React.FC<SearchBoxProps> =
             onChange={handleChange}
             value={value}
             placeholder={text}
-            style={{width, height, fontSize, borderRadius}}
+            style={style}
             className={styles.input}
         />
     );

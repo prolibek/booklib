@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import authService from "../../services/authService";
 import { login } from "../../features/auth/authSlice";
@@ -27,8 +27,27 @@ const LoginModal: React.FC<LoginModalProps> =
 
     const [loginValue, setLoginValue] = useState("");
     const [passwordValue, setPasswordValue] = useState("");
+    const [loginMessage, setLoginMessage] = useState("");
+    const [passwordMessage, setPasswordMessage] = useState("");
+
+    useEffect(() => {
+        setPasswordMessage("")
+    }, [passwordValue])
+
+    useEffect(() => {
+        setLoginMessage("")
+    }, [loginValue])
 
     const handleLogin = async () => {
+        if(loginValue.trim() === "") {
+            setLoginMessage("Это поле обязательно");
+            return;
+        }
+        if(passwordValue.trim() === "") {
+            setPasswordMessage("Это поле обязательно");
+            return;
+        }
+
         try {
             const response = await authService.login({
                 login_id: loginValue,
@@ -40,8 +59,15 @@ const LoginModal: React.FC<LoginModalProps> =
                 access_token, 
                 refresh_token
             }));
+            setVisible(false);
         } catch (error) {
-            console.log(error);
+            const detail = error.response.data['detail']
+            console.log(detail)
+            if (detail === "User not found.") {
+                setLoginMessage("Пользователь не найден");
+            } else if (detail === "Password is incorrect.") {
+                setPasswordMessage("Неправильный пароль");
+            }
         }
     }
 
@@ -64,31 +90,40 @@ const LoginModal: React.FC<LoginModalProps> =
                 <TextInput 
                     value={loginValue} 
                     handleChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginValue(e.target.value)} 
-                    borderRadius="10px" 
-                    fontSize="16px" 
-                    width="100%" 
-                    height="45px"
+                    
+                    style={{
+                        borderRadius: "10px",
+                        fontSize: "16px",
+                        width: "100%", 
+                        height: "45px",
+                        border: loginMessage.trim() === "" ? null : "1px solid rgb(101, 0, 0)" 
+                    }}
                 />
+                <p className={styles.errorMessage}>{ loginMessage }</p>
             </div>
             <div className={styles.inputWithText}>
                 <p className={styles.grayText}>Пароль:</p>
                 <TextInput 
                     value={passwordValue} 
                     handleChange={(e: React.ChangeEvent<HTMLInputElement>) => setPasswordValue(e.target.value)} 
-                    borderRadius="10px" 
-                    fontSize="16px" 
-                    width="100%" 
-                    height="45px"
+
+                    style={{
+                        borderRadius: "10px",
+                        fontSize: "16px",
+                        width: "100%", 
+                        height: "45px",
+                        border: passwordMessage.trim() === "" ? null : "1px solid rgb(101, 0, 0)" 
+                    }}
                 />
+                <p className={styles.errorMessage}>{ passwordMessage }</p>
             </div>
             <div className={styles.buttonWithText}>
                 <Button 
                     width="100%" 
                     height="48px"
                     click={() => {
-                        console.log("Bob")
-                        setVisible(false)
-                        handleLogin()
+                        console.log("Bob");
+                        handleLogin();
                     }}
                 >
                     <BrownText borderRadius="10px" fontSize="18px">Войти</BrownText>

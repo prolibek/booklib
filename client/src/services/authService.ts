@@ -32,7 +32,12 @@ const AuthService = {
             const response = await $api.post("users/login/", data);
             return response.data;        
         } catch (error) {
-            throw new Error("Ошибка входа.");
+            throw {
+                name: error.name,
+                message: error.message,
+                stack: error.stack, 
+                response: error.response
+            }
         }
     },
 
