@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 import uuid
 
 class CustomUser(AbstractUser):
-    email = models.CharField(unique=True, max_length=255)
+    email = models.EmailField(unique=True, max_length=255)
     username = models.CharField(unique=True, max_length=16)
 
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)

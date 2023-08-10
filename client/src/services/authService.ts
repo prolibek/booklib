@@ -46,7 +46,12 @@ const AuthService = {
             const response = await $api.post("users/register/", data);
             return response.data;
         } catch (error) {
-            throw new Error("Ошибка регистрации.")
+            throw {
+                name: error.name,
+                message: error.message,
+                stack: error.stack, 
+                response: error.response
+            }
         }
     },
 

@@ -1,20 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import jwt_decode, { JwtPayload } from "jwt-decode";
+
 interface IAuthState {
-    token: null | string;
+    token: null | object;
     isAuthenticated: boolean;
 }
-
 
 const initialState: IAuthState = {
     token: null,
     isAuthenticated: false,
 }
 
-const token = localStorage.getItem('access_token');
+const token = localStorage.getItem('refresh_token');
 
-if (token) {
-    initialState.token = token;
+const validateToken = (token: string | null): boolean => {
+    if(!token) return false;
+
+    try {
+        const decodedToken: JwtPayload = jwt_decode(token);
+        const currentTime = Date.now() / 1000;
+
+        return decodedToken.exp > currentTime;
+    } catch (error) {
+        return false;
+    }
+}
+
+if(!validateToken(token)) {
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('access_token');
+}
+
+if(token) {
+    initialState.token = {
+        access_token: localStorage.getItem('access_token'),
+        refresh_token: localStorage.getItem('refresh_token')
+    };
     initialState.isAuthenticated = true;
 }
 

@@ -39,7 +39,7 @@ $api.interceptors.request.use(
                         refresh_token: new_refresh
                     }))
                 } catch (error) {
-
+                    console.log(error)
                 }
             }
         }

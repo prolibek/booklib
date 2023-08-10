@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from django.core.validators import EmailValidator
+
 from . import models 
 
 # put modelserializer to override create function

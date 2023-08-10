@@ -24,7 +24,7 @@ const Header = () => {
     const handleLogout = async () => {
         const refresh = localStorage.getItem('refresh_token');
         const response = await AuthService.logout({ refresh });
-        dispatch(logout(response))
+        dispatch(logout(response));
     }
 
     return (

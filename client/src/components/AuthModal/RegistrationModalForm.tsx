@@ -72,7 +72,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> =
             }));
             setVisible(false);
         } catch (error) {
-            const detail = error.response.data['detail'];
+            if(error.response.data['email'][0] == "Enter a valid email address.")
+                setEmailMessage("Введите корректную почту")
         }
     }
 
