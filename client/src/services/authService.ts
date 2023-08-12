@@ -57,6 +57,7 @@ const AuthService = {
 
     logout: async (data: RefreshData) : Promise <void> => {
         const response = await $api.post("users/logout/", data);
+        console.log(response);
         return response.data;
     },
 
