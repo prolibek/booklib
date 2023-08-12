@@ -37,18 +37,38 @@ const refreshExpired = async (dispatch: Dispatch) => {
 
 $api.interceptors.request.use((config) => {
 
-    const dispatch = useDispatch();
     let access_token = localStorage.getItem('access_token');
 
-    if(access_token) {
-        const decodedToken: JwtPayload = jwt_decode(access_token);
-        if(decodedToken.exp <= (Date.now() / 1000)) {
-            access_token = refreshExpired(dispatch);
-            console.log('Done.');
-        }
+    if(access_token) 
         config.headers.Authorization = `Bearer ${access_token}`;
-    }
     return config;
 })
+
+$api.interceptors.response.use(
+    (res) => res,
+    async (error) => {
+        const dispatch = useDispatch();
+
+        if(localStorage.getItem('access_token')) {
+            const req = error.config;
+            if(!req._retry && error.response.status === 401 && error.response) {
+                // to avoid infinite loop
+                req._retry = true;
+                const refresh = localStorage.getItem('refresh_token');
+                try {
+                    const response = await AuthService.refresh({ refresh });
+                    const new_refresh = response.refresh;
+                    const access = response.access;
+                    dispatch(login({
+                        access_token: access,
+                        refresh_token: new_refresh
+                    }))
+                } catch (error) {
+
+                }
+            }
+        }
+    }
+)
 
 export default $api;

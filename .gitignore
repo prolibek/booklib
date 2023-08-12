@@ -173,3 +173,7 @@ typings/
 .yarn-integrity
 
 todo.txt
+
+.key
+
+.crt
