@@ -1,6 +1,4 @@
 .header {
-    position: fixed;
-    top: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10,6 +8,7 @@
     padding-top: 20px;
     padding-bottom: 20px;
     width: 66%;
+    margin-bottom: 50px;
 }
 
 .navRows {

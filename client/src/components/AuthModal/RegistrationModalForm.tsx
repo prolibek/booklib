@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { login } from "../../features/auth/authSlice";
-import authService from "../../services/authService";
+import { login } from "~/features/auth/authSlice";
+import authService from "~/services/authService";
 
 import BasicModal from "~/ui/BasicModal/BasicModal";
 import TextInput from "~/ui/TextInput/TextInput";

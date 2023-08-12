@@ -1,0 +1,29 @@
+.cardRect {
+    display: flex;
+    justify-content: center;
+    width: 40%;
+    border-radius: 10px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    transition: .4s;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.cardRect:hover {
+    cursor: pointer;
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 25px;
+}
+
+
+.cardContent p {
+    font-size: 24px;
+    font-family: "Roboto Condensed", sans-serif;
+}
