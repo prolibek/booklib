@@ -1,15 +1,13 @@
 import styles from './Header.module.css';
 import Logo from '~/ui/Logo/Logo';
-import BrownText from "~/ui/BrownText/BrownText";
 import TextInput from '~/ui/TextInput/TextInput';
 import RegistrationModal from '../AuthModal/RegistrationModalForm';
 import LoginModal from '../AuthModal/LoginModalForm';
 
 import { useState } from 'react';
 
-import { useSelector } from 'react-redux';
-import { RootState } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useSelector, RootState, useDispatch } from 'react-redux';
 import { logout } from "~/features/auth/authSlice";
 import AuthService from '~/services/authService';
 
@@ -29,7 +27,7 @@ const Header = () => {
 
     return (
         <div className={styles.header}>
-            <Logo/>
+            <Link to="/" className={styles.navText}><Logo/></Link>
             <TextInput style={{
                 width: "275px", 
                 height: "40px", 
@@ -38,10 +36,10 @@ const Header = () => {
             text = "Начните искать"
             />
             <div className={styles.navRows}>
-                <BrownText><a className={styles.navText}>Библиотека</a></BrownText>
-                <BrownText><a className={styles.navText}>Админка</a></BrownText>
+                <Link to="" className={styles.navText}>Библиотека</Link>
+                <Link to="/admin/" className={styles.navText}>Админка</Link>
             </div>
-            <BrownText>
+            <p className={styles.navText}>
                 {authState.isAuthenticated ? (
                     <a 
                         onClick={() => { handleLogout() }}
@@ -57,7 +55,7 @@ const Header = () => {
                     Войти
                     </a>
                 )}
-            </BrownText>
+            </p>
 
             <RegistrationModal 
                 visible={regModal} 

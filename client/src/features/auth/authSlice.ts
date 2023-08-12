@@ -7,11 +7,6 @@ interface IAuthState {
     isAuthenticated: boolean;
 }
 
-const initialState: IAuthState = {
-    token: null,
-    isAuthenticated: false,
-}
-
 const token = localStorage.getItem('refresh_token');
 
 const validateToken = (token: string | null): boolean => {
@@ -30,6 +25,17 @@ const validateToken = (token: string | null): boolean => {
 if(!validateToken(token)) {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('access_token');
+}
+
+const initialState: IAuthState = {
+    token: token
+        ? {
+            access_token: localStorage.getItem("access_token"),
+            refresh_token: token
+        }
+        : null
+        ,
+    isAuthenticated: !!token,
 }
 
 if(token) {

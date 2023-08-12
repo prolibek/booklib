@@ -13,5 +13,5 @@
 
 .button:hover * {
     color: white;
-    transition: 0s;
+    transition: .5s;
 }

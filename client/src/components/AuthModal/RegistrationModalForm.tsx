@@ -155,13 +155,13 @@ const RegistrationModal: React.FC<RegistrationModalProps> =
                 <Button 
                     width="100%" 
                     height="48px"
+                    fontSize="18px"
                     click={ () => {
                         handleRegister();
                     }}    
                 >
-                    <BrownText fontSize="18px">Зарегистрироваться</BrownText>
-                </Button>
-                <p>Уже зарегистрированы? <a 
+                Зарегистрироваться
+                </Button>Уже зарегистрированы? <a 
                     className={styles.changeModal}
                     onClick={
                         () => {
@@ -169,7 +169,7 @@ const RegistrationModal: React.FC<RegistrationModalProps> =
                             setLoginVisible(true);
                         }
                     }
-                >Нажмите сюда!</a></p>
+                >Нажмите сюда!</a>
             </div>
         </BasicModal>
     );

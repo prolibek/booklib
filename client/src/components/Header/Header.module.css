@@ -21,6 +21,8 @@
 
 .navText {
     transition: .3s;
+    text-decoration: none;
+    color: #4D2900;
 }
 
 .navText:hover {

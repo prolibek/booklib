@@ -121,14 +121,16 @@ const LoginModal: React.FC<LoginModalProps> =
                 <Button 
                     width="100%" 
                     height="48px"
+                    fontSize="18px"
                     click={() => {
                         console.log("Bob");
                         handleLogin();
                     }}
                 >
-                    <BrownText borderRadius="10px" fontSize="18px">Войти</BrownText>
+                Войти
                 </Button>
-                <p>Ещё не зарегистрированы? <a 
+                Ещё не зарегистрированы? 
+                <a 
                     className={styles.changeModal}
                     onClick={
                         () => {
@@ -136,7 +138,7 @@ const LoginModal: React.FC<LoginModalProps> =
                             setRegVisible(true);
                         }
                     }
-                >Нажмите сюда!</a></p>
+                >Нажмите сюда!</a>
             </div>
         </BasicModal>
     );

@@ -56,12 +56,8 @@ const AuthService = {
     },
 
     logout: async (data: RefreshData) : Promise <void> => {
-        try {
-            const response = await $api.post("users/logout/", data);
-            return response.data;
-        } catch (error) {
-            throw new Error("Ошибка выхода.");
-        }
+        const response = await $api.post("users/logout/", data);
+        return response.data;
     },
 
     refresh: async (data: RefreshData) : Promise <RefreshResponse> => {

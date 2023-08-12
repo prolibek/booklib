@@ -18,15 +18,15 @@ const AdminPage = () => {
                 <div className={styles.wrapper}>
                     <AdminCard
                         image={book_img}
-                        name="Добавить книгу"
+                        name="Книги"
                     />
                     <AdminCard
                         image={author_img}
-                        name="Добавить автора"
+                        name="Авторы"
                     />
                     <AdminCard
                         image={genre_img}
-                        name="Добавить жанр"
+                        name="Жанры"
                     />
                 </div>
             </div>
