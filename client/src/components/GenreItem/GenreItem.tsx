@@ -1,18 +1,21 @@
 import React from "react";
 
-import styles from "./GenreCard.module.css";
+import { Link } from "react-router-dom";
+
+import styles from "./GenreItem.module.css";
 
 import edit_icon from "~/assets/images/edit_icon.svg";
 import del_icon from "~/assets/images/delete_icon.svg";
 
-interface GenreCardProps {
+interface GenreItemProps {
     id?: number;
     name: string;
     description: string;
+    remove: () => void;
 }
 
-const GenreCard:React.FC<GenreCardProps> = ({
-    id, name, description
+const GenreItem:React.FC<GenreItemProps> = ({
+    id, name, description, remove
 }) => {
     return (
         <div className={styles.card}>
@@ -21,11 +24,11 @@ const GenreCard:React.FC<GenreCardProps> = ({
                 <p className={styles.descText}>{description}</p>
             </div>
             <div className={styles.icons}>
-                <img src={edit_icon} />
-                <img src={del_icon} />
+                <img src={edit_icon}/>
+                <img src={del_icon} onClick={remove}/>
             </div>
         </div>
     )
 }
 
-export default GenreCard;
+export default GenreItem;

@@ -3,8 +3,14 @@ import { useState, useEffect } from "react";
 import styles from "./GenreListPage.module.css";
 import TextInput from "~/ui/TextInput/TextInput";
 import { Link } from "react-router-dom";
-import GenreCard from "~/components/GenreCard/GenreCard";
+import GenreItem from "~/components/GenreItem/GenreItem";
 import $api from "~/http";
+
+interface GenreModel {
+    id: number;
+    name: string;
+    description?: string;
+}
 
 const GenreListPage = () => {
 
@@ -14,7 +20,9 @@ const GenreListPage = () => {
     useEffect(() => {
         (async () => {
             const response = await $api.get("library/genres/");
-            setGenreList([...genreList, ...response.data]);
+            console.log(response.data);
+            setGenreList([...response.data]);
+            setGenreCount(genreList.length);
         })();
     }, [])
 
@@ -29,6 +37,12 @@ const GenreListPage = () => {
             default:
                 return "ов"; 
         }
+    }
+
+    const removeGenre = async (genre: GenreModel) => {
+        console.log(genre);
+        await $api.delete(`library/genres/${genre.id}/`);
+        setGenreList(genreList.filter((item: GenreModel) => item.id !== genre.id));
     }
 
     return (
@@ -54,8 +68,14 @@ const GenreListPage = () => {
                         to="/admin/genres/genre-add">Добавить жанр</Link>
                 </div>
                 <div>
-                    {genreList.map((item) => (
-                            <GenreCard name={item.name} description={item.description}/>
+                    {genreList.map((item: GenreModel) => (
+                            <GenreItem 
+                                key={item.id}
+                                id={item.id}
+                                name={item.name} 
+                                description={item.description}
+                                remove={() => removeGenre(item)}
+                            />
                         ))}
                 </div>
             </div>

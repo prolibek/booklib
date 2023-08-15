@@ -33,3 +33,7 @@
 .icons img {
     height: 20px;
 }
+
+.icons img:hover {
+    cursor: pointer;
+}

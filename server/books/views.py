@@ -27,7 +27,7 @@ class BookViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.BookSerializer
     queryset = models.Book.objects.all()
     permission_classes = ( permissions.IsAdminOrReadOnly, )
-    filter_backends = (  )
+    filter_backends = ( filters.PublishedBooksFilterBackend, )
     lookup_field = 'id'
     
     @check_book_permissions
