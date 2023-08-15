@@ -76,11 +76,12 @@ const GenreAddPage = () => {
                 <Button
                     height="40px"
                     width="30%"
+                    fontSize="16px"
                     style={{
                         marginLeft: "auto"
                     }}
                     click={ () => handlePost() }
-                ><p style={{ fontSize: "16px" }}>Добавить жанр</p></Button>
+                >Добавить жанр</Button>
             </div>
         </Layout>
     )

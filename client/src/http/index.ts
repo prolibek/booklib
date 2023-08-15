@@ -46,10 +46,11 @@ $api.interceptors.response.use(
                 } catch (error) {
                     console.log(error);
                 }
+                return $api(req);
             }
-            return $api(req);
+            return Promise.reject(error);
         } catch (error) {
-            Promise.reject(error);
+            return Promise.reject(error);
         }
     }
 )

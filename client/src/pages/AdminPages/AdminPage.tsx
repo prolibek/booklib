@@ -7,6 +7,7 @@ import author_img from "~/assets/images/author_adminpanel.svg";
 import genre_img from "~/assets/images/genre_adminpanel.svg";
 
 import styles from "./AdminPage.module.css";
+import { Link } from "react-router-dom";
 
 const AdminPage = () => {
     return (
@@ -27,6 +28,7 @@ const AdminPage = () => {
                     <AdminCard
                         image={genre_img}
                         name="Жанры"
+                        path="/admin/genres"
                     />
                 </div>
             </div>

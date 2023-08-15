@@ -1,0 +1,41 @@
+.wrapper {
+    width: 66%;
+}
+
+.head {
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.flexer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.mainText {
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 24px;
+    font-weight: normal;
+}
+
+.smallText {
+    font-size: 14px;
+    color: #737373;
+}
+
+.textAndInput {
+    width: 40%;
+}
+
+.link {
+    color: #4D2900;
+    text-decoration: none;
+    transition: .4s;
+    font-size: 16px;
+}
+
+.link:hover {
+    color: #bc4e00;
+}
