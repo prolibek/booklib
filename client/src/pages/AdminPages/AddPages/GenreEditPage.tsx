@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import TextInput from "~/ui/TextInput/TextInput";
 import TextArea from "~/ui/TextArea/TextArea";
@@ -7,19 +7,32 @@ import Layout from "~/components/Layout/Layout";
 
 import styles from "./GenreAddPage.module.css";
 import $api from "~/http";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const GenreAddPage = () => {
+const GenreEditPage = () => {
 
     const nav = useNavigate();
+    const params = useParams();
 
     const [name, setName] = useState("");
     const [slug, setSlug] = useState("");
     const [desc, setDesc] = useState("");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await $api.get(`library/genres/${params.id}/`);
+            setName(response.data.name);
+            setSlug(response.data.slug);
+            setDesc(response.data.description);        
+        }
+
+        fetchData();
+    }, []);
+
     
     const handlePost = async () => {
         try {
-            await $api.post("library/genres/", {
+            await $api.put(`library/genres/${params.id}/`, {
                 name: name,
                 description: desc, 
                 slug: slug
@@ -33,7 +46,7 @@ const GenreAddPage = () => {
     return (
         <Layout>
             <div className={styles.wrapper}>
-                <h2 className={styles.mainText}>Добавление жанра</h2>
+                <h2 className={styles.mainText}>Изменение жанра</h2>
                 <div style={{width: "100%"}} className={styles.featuresText}>
                     <TextInput
                         text="Название жанра"
@@ -84,11 +97,11 @@ const GenreAddPage = () => {
                     style={{
                         marginLeft: "auto"
                     }}
-                    click={ () => handlePost() }
-                >Добавить жанр</Button>
+                    click={ async () => await handlePost() }
+                >Применить изменения</Button>
             </div>
         </Layout>
     )
 };
 
-export default GenreAddPage;
+export default GenreEditPage;

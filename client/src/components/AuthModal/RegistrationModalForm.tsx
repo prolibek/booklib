@@ -156,8 +156,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> =
                     width="100%" 
                     height="48px"
                     fontSize="18px"
-                    click={ () => {
-                        handleRegister();
+                    click={async () => {
+                        await handleRegister();
                     }}    
                 >
                 Зарегистрироваться

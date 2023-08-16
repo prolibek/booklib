@@ -122,9 +122,8 @@ const LoginModal: React.FC<LoginModalProps> =
                     width="100%" 
                     height="48px"
                     fontSize="18px"
-                    click={() => {
-                        console.log("Bob");
-                        handleLogin();
+                    click={async () => {
+                        await handleLogin();
                     }}
                 >
                 Войти

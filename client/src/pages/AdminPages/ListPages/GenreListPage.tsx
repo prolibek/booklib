@@ -20,11 +20,13 @@ const GenreListPage = () => {
     useEffect(() => {
         (async () => {
             const response = await $api.get("library/genres/");
-            console.log(response.data);
             setGenreList([...response.data]);
-            setGenreCount(genreList.length);
         })();
     }, [])
+
+    useEffect(() => {
+        setGenreCount(genreList.length);
+    }, [genreList])
 
     const getEnding: string = (count: number) => {
         switch(count % 10) {
@@ -65,7 +67,7 @@ const GenreListPage = () => {
                     </div>
                     <Link 
                         className={styles.link}
-                        to="/admin/genres/genre-add">Добавить жанр</Link>
+                        to="/admin/genres/add">Добавить жанр</Link>
                 </div>
                 <div>
                     {genreList.map((item: GenreModel) => (

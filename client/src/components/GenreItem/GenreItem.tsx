@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./GenreItem.module.css";
 
@@ -17,6 +17,8 @@ interface GenreItemProps {
 const GenreItem:React.FC<GenreItemProps> = ({
     id, name, description, remove
 }) => {
+    const nav = useNavigate();
+
     return (
         <div className={styles.card}>
             <div className={styles.text}>
@@ -24,7 +26,7 @@ const GenreItem:React.FC<GenreItemProps> = ({
                 <p className={styles.descText}>{description}</p>
             </div>
             <div className={styles.icons}>
-                <img src={edit_icon}/>
+                <img src={edit_icon} onClick={() => nav(`/admin/genres/${id}`, {replace: false})}/>
                 <img src={del_icon} onClick={remove}/>
             </div>
         </div>
