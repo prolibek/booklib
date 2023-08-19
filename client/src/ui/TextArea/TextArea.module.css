@@ -5,6 +5,7 @@
     border-radius: 25px;
     padding: 25px;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
 }
 
 .textArea::placeholder {

@@ -69,8 +69,7 @@ const GenreAddPage = () => {
                         width: "100%",
                         fontSize: "20px",
                         marginTop: "22px",
-                        marginBottom: "25px",
-                        overflow: "hidden"
+                        marginBottom: "25px"
                     }}
                     value={desc}
                     handleChange={(e) => {

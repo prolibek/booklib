@@ -3,12 +3,14 @@ import GenreAddPage from "./pages/AdminPages/AddPages/GenreAddPage";
 import GenreListPage from "./pages/AdminPages/ListPages/GenreListPage";
 import HomePage from "./pages/HomePage/HomePages";
 import GenreEditPage from "./pages/AdminPages/AddPages/GenreEditPage";
+import AuthorAddPage from "./pages/AdminPages/AddPages/AuthorAddPage";
 
 export const adminRoutes = [
     { path: "/admin", element: <AdminPage/> },
-    { path: "/admin/genres/genre-add", element: <GenreAddPage/> },
     { path: "/admin/genres", element: <GenreListPage/> },
+    { path: "/admin/genres/add", element: <GenreAddPage/> },
     { path: "/admin/genres/:id", element: <GenreEditPage/> },
+    { path: "/admin/authors/add", element: <AuthorAddPage/>}
 ];
 
 export const publicRoutes = [
