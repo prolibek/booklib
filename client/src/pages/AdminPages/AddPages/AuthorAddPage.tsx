@@ -16,6 +16,8 @@ import 'react-image-crop/dist/ReactCrop.css';
 
 const AuthorAddPage = () => {
 
+    const nav = useNavigate();
+
     const inputStyle = {
         width: "100%",
         height: "50px",
@@ -29,6 +31,11 @@ const AuthorAddPage = () => {
 
     const [visible, setVisible] = useState(false);
 
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [desc, setDesc] = useState("");
+    const [slug, setSlug] = useState("");
+
     const selectImage = (file: Blob) => {
         setImage(null);
         setSrc(null);
@@ -39,9 +46,20 @@ const AuthorAddPage = () => {
         setVisible(true);
     }
 
-    useEffect(() => {
-        console.log(src);
-    }, [src]);
+    const handlePost = async () => {
+        try {
+            await $api.post("library/authors/", {
+                first_name: firstName,
+                last_name: setLastName,
+                portrait: output,
+                biography: desc,
+                slug
+            });
+            nav("admin/authors", { replace: false });
+        } catch(error) {
+            console.log(error);
+        }
+    }
 
     const cropImageNow = () => {
         const canvas = document.createElement('canvas');
@@ -75,10 +93,6 @@ const AuthorAddPage = () => {
         setVisible(false);
     };
 
-    useEffect(() => {
-        console.log(src);
-    }, [src]);
-
     // 16*21
     return (
         <Layout>
@@ -87,6 +101,7 @@ const AuthorAddPage = () => {
                 <div
                     style={{
                         display: "flex",
+                        justifyContent: "center",
                         marginBottom: "30px",
                         flexWrap: "wrap"
                     }}
@@ -97,7 +112,7 @@ const AuthorAddPage = () => {
                     <ImageUploader
                         text="Нажмите или перетащите изображение автора"
                         style={{
-                            width: "259px",
+                            width: "calc(28% - 27px)",
                             height: "340px",
                             marginRight: "27px"
                         }}
@@ -106,9 +121,9 @@ const AuthorAddPage = () => {
                         <img 
                             src={output} 
                             style={{
-                                height: "340px", 
-                                marginRight: "27px",
-                                borderRadius: "10px"
+                                width: "110%",
+                                height: "calc(100% + 8px)",
+                                borderRadius: "20px"
                             }}
                         /> 
                     </ImageUploader>)
@@ -142,10 +157,14 @@ const AuthorAddPage = () => {
                                 }}
                             >
                                 <TextInput
+                                    value={firstName}
+                                    handleChange={(e) => setFirstName(e.target.value)}
                                     style={inputStyle} 
                                     text="Имя автора"
                                 />
                                 <TextInput
+                                    value={lastName}
+                                    handleChange={(e) => setLastName(e.target.value)}
                                     style={inputStyle}  
                                     text="Фамилия автора (необязательно)"
                                 />
@@ -154,6 +173,8 @@ const AuthorAddPage = () => {
                                 width: "50%"
                             }}>
                                 <TextInput
+                                    value={slug}
+                                    handleChange={(e) => setSlug(e.target.value)}
                                     style={{
                                         width: "calc(100% - 20px)",
                                         height: "117px",
@@ -168,6 +189,8 @@ const AuthorAddPage = () => {
                             width: "100%"
                         }}>
                             <TextArea 
+                                value={desc}
+                                handleChange={(e) => setDesc(e.target.value)}
                                 style={{
                                     minHeight: "205px",
                                     fontSize: "16px",
@@ -205,7 +228,7 @@ const AuthorAddPage = () => {
                         <ReactCrop
                             crop={crop}
                             onChange={setCrop}
-                            aspect={18/21}
+                            aspect={17/21}
                         >
                             <img
                                 style={{
