@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import TextInput from "~/ui/TextInput/TextInput";
 import TextArea from "~/ui/TextArea/TextArea";
@@ -9,10 +9,6 @@ import styles from "./GenreAddPage.module.css";
 import $api from "~/http";
 import { useNavigate } from "react-router-dom";
 import ImageUploader from "~/ui/ImageUploader/ImageUploader";
-import BasicModal from "~/ui/BasicModal/BasicModal";
-
-import ReactCrop from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
 
 const AuthorAddPage = () => {
 
@@ -28,8 +24,6 @@ const AuthorAddPage = () => {
     const [crop, setCrop] = useState({ aspect: 16/21 })
     const [image, setImage] = useState(null);
     const [output, setOutput] = useState(null);
-
-    const [visible, setVisible] = useState(false);
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -50,7 +44,7 @@ const AuthorAddPage = () => {
         try {
             await $api.post("library/authors/", {
                 first_name: firstName,
-                last_name: setLastName,
+                last_name: lastName,
                 portrait: output,
                 biography: desc,
                 slug
@@ -61,37 +55,7 @@ const AuthorAddPage = () => {
         }
     }
 
-    const cropImageNow = () => {
-        const canvas = document.createElement('canvas');
-        const scaleX = image.naturalWidth / image.width;
-        const scaleY = image.naturalHeight / image.height;
-        canvas.width = crop.width;
-        canvas.height = crop.height;
-        const ctx = canvas.getContext('2d');
- 
-        const pixelRatio = window.devicePixelRatio;
-        canvas.width = crop.width * pixelRatio;
-        canvas.height = crop.height * pixelRatio;
-        ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-        ctx.imageSmoothingQuality = 'high';
- 
-        ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height,
-        );
- 
-        // Converting to base64
-        const base64Image = canvas.toDataURL('image/jpeg');
-        setOutput(base64Image);
-        setVisible(false);
-    };
+    const [visible, setVisible] = useState(false);
 
     // 16*21
     return (
@@ -136,6 +100,14 @@ const AuthorAddPage = () => {
                             marginRight: "27px"
                         }}
                         change={(e: React.ChangeEvent<HTMLInputElement>) => selectImage(e.target.files[0])}
+                        src={src}
+                        setImage={(e) => setImage(e.target)}
+                        crop={crop}
+                        setCrop={setCrop}
+                        image={image}
+                        visible={visible}
+                        setVisible={setVisible}
+                        setOutput={setOutput}
                     >
                         <p>Нажмите или перетащите сюда фото автора</p>
                     </ImageUploader> 
@@ -212,42 +184,6 @@ const AuthorAddPage = () => {
                     click={ () => handlePost() }
                 >Добавить автора</Button>
             </div>
-            <BasicModal
-                visible={visible}
-                setVisible={setVisible}
-            >
-                {src && (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "20px",
-                            alignItems: "center"
-                        }}
-                    >
-                        <ReactCrop
-                            crop={crop}
-                            onChange={setCrop}
-                            aspect={17/21}
-                        >
-                            <img
-                                style={{
-                                    maxWidth: "1000px",
-                                    maxHeight: "600px"
-                                }}
-                               src={src}
-                               onLoad={(e) => setImage(e.target)}
-                            />
-                        </ReactCrop>
-                        <Button
-                            width="400px"
-                            height="35px"
-                            fontSize="18px"
-                            click={() => cropImageNow()}
-                        >Обрезать</Button>
-                    </div>
-                )}
-            </BasicModal>
         </Layout>
     )
 };

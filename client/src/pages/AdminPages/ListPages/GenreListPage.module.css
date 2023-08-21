@@ -12,6 +12,7 @@
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .mainText {
@@ -38,4 +39,10 @@
 
 .link:hover {
     color: #bc4e00;
+}
+
+.authorList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }

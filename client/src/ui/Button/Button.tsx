@@ -3,7 +3,7 @@ import React from "react";
 import styles from './Button.module.css';
 
 interface ButtonProps {
-    click?: () => Promise<void>;
+    click?: () => void;
     width?: string;
     height?: string;
     fontSize?: string;
