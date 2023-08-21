@@ -18,13 +18,6 @@ class Base64ImageField(serializers.ImageField):
                 # Break out the header from the base64 content
                 header, data = data.split(';base64,')
 
-            else:
-                import requests
-
-                data = requests.get(data)
-                
-                data = data.content
-
             # Try to decode the file. Return validation error if it fails.
             try:
                 decoded_file = base64.b64decode(data)

@@ -102,28 +102,6 @@ const AuthorEditPage = () => {
                         flexWrap: "wrap"
                     }}
                 >
-                    {
-                    output ?
-                    ( 
-                    <ImageUploader
-                        text="Нажмите или перетащите изображение автора"
-                        style={{
-                            width: "calc(28% - 27px)",
-                            height: "340px",
-                            marginRight: "27px"
-                        }}
-                        change={(e: React.ChangeEvent<HTMLInputElement>) => selectImage(e.target.files[0])}
-                    >
-                        <img 
-                            src={output} 
-                            style={{
-                                width: "110%",
-                                height: "calc(100% + 8px)",
-                                borderRadius: "20px"
-                            }}
-                        /> 
-                    </ImageUploader>)
-                    :
                     <ImageUploader 
                         text="Нажмите или перетащите изображение автора"
                         style={{
@@ -140,10 +118,10 @@ const AuthorEditPage = () => {
                         visible={visible}
                         setVisible={setVisible}
                         setOutput={setOutput}
+                        output={output}
                     >
                         <p>Нажмите или перетащите сюда фото автора</p>
-                    </ImageUploader> 
-                    }
+                    </ImageUploader>
                     <div className={styles.textValuesAuthor}>
                         <div
                             style={{

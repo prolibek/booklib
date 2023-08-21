@@ -60,7 +60,7 @@ const AuthorListPage = () => {
                             <p className={styles.smallText}>{authorCount} Автор{getEnding(authorCount)}</p>
                         </div>
                         <TextInput 
-                            text="Имя жанра"
+                            text="Имя автора"
                             style={{
                                 width: "230px",
                                 height: "30px",

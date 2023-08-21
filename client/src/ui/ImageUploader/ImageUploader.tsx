@@ -12,6 +12,7 @@ interface ImageUploaderProps {
     style?: object;
     src: string;
     setOutput: unknown;
+    output: unknown;
     setImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
     change: (e: React.ChangeEvent<HTMLInputElement>) => void;
     visible?: boolean;
@@ -23,7 +24,7 @@ interface ImageUploaderProps {
 }
 
 const ImageUploader:React.FC<ImageUploaderProps> = ({
-    style, change, src, setImage, visible, setVisible, crop, setCrop, children, image, setOutput
+    style, change, src, setImage, visible, setVisible, crop, setCrop, image, setOutput, output, children
 }) => {
 
 
@@ -66,8 +67,17 @@ const ImageUploader:React.FC<ImageUploaderProps> = ({
     };
 
     return (
-        <div style={style}className={styles.imageInput}>
-            {children}
+        <div style={style} className={styles.imageInput}>
+            {
+                output ?
+                (
+                <img 
+                    src={output}
+                />
+                )
+                :
+                <>{children}</>
+            }
             <input
                 accept="image/*"
                 onChange={handleChange}
