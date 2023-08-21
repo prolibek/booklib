@@ -79,6 +79,7 @@ const ImageUploader:React.FC<ImageUploaderProps> = ({
                 <>{children}</>
             }
             <input
+                id="input-file"
                 accept="image/*"
                 onChange={handleChange}
                 type="file"
@@ -88,35 +89,35 @@ const ImageUploader:React.FC<ImageUploaderProps> = ({
                 setVisible={setVisible}
             >
                 {src && (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "20px",
-                            alignItems: "center"
-                        }}
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "20px",
+                        alignItems: "center"
+                    }}
+                >
+                    <ReactCrop
+                        crop={crop}
+                        onChange={setCrop}
+                        aspect={17/21}
                     >
-                        <ReactCrop
-                            crop={crop}
-                            onChange={setCrop}
-                            aspect={17/21}
-                        >
-                            <img
-                                style={{
-                                    maxWidth: "1000px",
-                                    maxHeight: "600px"
-                                }}
-                               src={src}
-                               onLoad={setImage}
-                            />
-                        </ReactCrop>
-                        <Button
-                            width="400px"
-                            height="35px"
-                            fontSize="18px"
-                            click={() => cropImageNow()}
-                        >Обрезать</Button>
-                    </div>
+                        <img
+                            style={{
+                                maxWidth: "1000px",
+                                maxHeight: "600px"
+                            }}
+                           src={src}
+                           onLoad={setImage}
+                        />
+                    </ReactCrop>
+                    <Button
+                        width="400px"
+                        height="35px"
+                        fontSize="18px"
+                        click={() => cropImageNow()}
+                    >Обрезать</Button>
+                </div>
                 )}
             </BasicModal>
         </div>

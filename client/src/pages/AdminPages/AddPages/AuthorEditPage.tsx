@@ -62,6 +62,9 @@ const AuthorEditPage = () => {
         const imgUrl = URL.createObjectURL(file);
         setSrc(imgUrl);
         setVisible(true);
+        const inputEl = document.getElementById("input-file");
+        if(inputEl)
+            inputEl.value = "";
     }
 
     const handlePost = async () => {

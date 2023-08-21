@@ -38,6 +38,9 @@ const AuthorAddPage = () => {
         const imgUrl = URL.createObjectURL(file);
         setSrc(imgUrl);
         setVisible(true);
+        const inputEl = document.getElementById("input-file");
+        if(inputEl)
+            inputEl.value = "";
     }
 
     const handlePost = async () => {
@@ -77,9 +80,9 @@ const AuthorAddPage = () => {
                             height: "340px",
                             marginRight: "27px"
                         }}
-                        change={(e: React.ChangeEvent<HTMLInputElement>) => selectImage(e.target.files[0])}
+                        change={(e: React.ChangeEvent<HTMLInputElement>) => selectImage(e.target.files[0]) }
                         src={src}
-                        setImage={(e) => setImage(e.target)}
+                        setImage={(e: React.ChangeEvent<HTMLInputElement>) => setImage(e.target)}
                         crop={crop}
                         setCrop={setCrop}
                         image={image}
