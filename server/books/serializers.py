@@ -18,13 +18,20 @@ class Base64ImageField(serializers.ImageField):
                 # Break out the header from the base64 content
                 header, data = data.split(';base64,')
 
+            else:
+                import requests
+
+                data = requests.get(data)
+                
+                data = data.content
+
             # Try to decode the file. Return validation error if it fails.
             try:
                 decoded_file = base64.b64decode(data)
             except TypeError:
                 self.fail('invalid_image')
-
             # Generate file name:
+
             file_name = str(uuid.uuid4())[:12] # 12 characters are more than enough.
             # Get the file name extension:
             file_extension = self.get_file_extension(file_name, decoded_file)

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import TextInput from "~/ui/TextInput/TextInput";
 import TextArea from "~/ui/TextArea/TextArea";
@@ -7,12 +7,13 @@ import Layout from "~/components/Layout/Layout";
 
 import styles from "./GenreAddPage.module.css";
 import $api from "~/http";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ImageUploader from "~/ui/ImageUploader/ImageUploader";
 
-const AuthorAddPage = () => {
+const AuthorEditPage = () => {
 
     const nav = useNavigate();
+    const params = useParams();
 
     const inputStyle = {
         width: "100%",
@@ -30,6 +31,29 @@ const AuthorAddPage = () => {
     const [desc, setDesc] = useState("");
     const [slug, setSlug] = useState("");
 
+    const getImageBase64 = async (imageUrl: string) => {
+        const response = await $api.get(imageUrl);
+        const blob = await response.blob();
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.readAsDataURL(blob);
+        });
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await $api.get(`library/authors/${params.id}/`);
+            setOutput(response.data.portrait);
+            setFirstName(response.data.first_name);
+            setLastName(response.data.last_name);
+            setDesc(response.data.biography);
+            setSlug(response.data.slug);
+        }
+
+        fetchData();
+    }, []);
+
     const selectImage = (file: Blob) => {
         setImage(null);
         setSrc(null);
@@ -42,17 +66,25 @@ const AuthorAddPage = () => {
 
     const handlePost = async () => {
         try {
-            await $api.post("library/authors/", {
+            let data = {
                 first_name: firstName,
                 last_name: lastName,
-                portrait: output,
                 biography: desc,
                 slug
-            });
+            }
+
+            if(!output.includes("http://"))
+                data = { ...data, portrait: output }
+
+            await $api.patch(`library/authors/${params.id}/`, data);
             nav("/admin/authors", { replace: false });
         } catch(error) {
             console.log(error);
         }
+    }
+
+    const handleNull = (str: string | null) => {
+        return str === null ? '' : str;
     }
 
     const [visible, setVisible] = useState(false);
@@ -61,7 +93,7 @@ const AuthorAddPage = () => {
     return (
         <Layout>
             <div className={styles.wrapper}>
-                <h2 className={styles.mainText}>Добавление автора</h2>
+                <h2 className={styles.mainText}>Изменение автора</h2>
                 <div
                     style={{
                         display: "flex",
@@ -135,7 +167,7 @@ const AuthorAddPage = () => {
                                     text="Имя автора"
                                 />
                                 <TextInput
-                                    value={lastName}
+                                    value={handleNull(lastName)}
                                     handleChange={(e) => setLastName(e.target.value)}
                                     style={inputStyle}  
                                     text="Фамилия автора (необязательно)"
@@ -161,7 +193,7 @@ const AuthorAddPage = () => {
                             width: "100%"
                         }}>
                             <TextArea 
-                                value={desc}
+                                value={handleNull(desc)}
                                 handleChange={(e) => setDesc(e.target.value)}
                                 style={{
                                     minHeight: "205px",
@@ -182,10 +214,10 @@ const AuthorAddPage = () => {
                         marginLeft: "auto"
                     }}
                     click={ () => handlePost() }
-                >Добавить автора</Button>
+                >Применить изменения</Button>
             </div>
         </Layout>
     )
 };
 
-export default AuthorAddPage;
+export default AuthorEditPage;

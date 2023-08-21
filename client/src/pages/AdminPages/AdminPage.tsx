@@ -24,6 +24,7 @@ const AdminPage = () => {
                     <AdminCard
                         image={author_img}
                         name="Авторы"
+                        path="/admin/authors"
                     />
                     <AdminCard
                         image={genre_img}
