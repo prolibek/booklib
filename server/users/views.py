@@ -11,69 +11,41 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 class RegisterAPIView(views.APIView):
     def post(self, request):
         serializer = serializers.UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        activation_token = models.ActivationToken.objects.create(user=user)
+        utils.send_activation_mail(user.email, activation_token.pk, request)
 
-        data = {}
-         
-        if serializer.is_valid():
-            serializer.save()
-            try:
-                email=request.data['email']
+        tokens = RefreshToken.for_user(user)
+        tokens['is_email_confirmed'] = user.is_email_confirmed
+        tokens['is_admin'] = user.is_staff
 
-                user = models.CustomUser.objects.get(email=email)
-                activation_token = models.ActivationToken.objects.create(user=user)
-
-                utils.send_activation_mail(email, activation_token.pk, request)
-
-                data['detail'] = 'Activation email was succesfully sent.'
-
-                tokens = RefreshToken.for_user(user)
-
-                tokens['is_email_confirmed'] = user.is_email_confirmed
-                tokens['is_admin'] = user.is_staff
-
-                data['refresh_token'] = str(tokens)
-                data['access_token'] = str(tokens.access_token)
-
-            except Exception as e: 
-                data['detail'] = str(e)
-
-            return Response(data, status=status.HTTP_200_OK)
-        else:
-            print(serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'detail': 'Activation email was successfully sent.',
+            'refresh_token': str(tokens),
+            'access_token': str(tokens.access_token)
+        })
 
 class LoginAPIView(views.APIView):
     def post(self, request):
-        # User chooses if he wants to login using username or email
         login_id = request.data['login_id']
         password = request.data['password']
 
-        # A bit nesting here (fix it if you want)
         try:
-            user = models.CustomUser.objects.get(email=login_id)
+            user = models.CustomUser.objects.get(email=login_id) | models.CustomUser.objects.get(username=login_id)
         except models.CustomUser.DoesNotExist:
-            try:
-                user = models.CustomUser.objects.get(username=login_id)
-            except:
-                return Response({ 'detail': 'User not found.' }, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({ 'detail': 'User not found.' }, status=status.HTTP_401_UNAUTHORIZED)
         
         if not user.check_password(password):
             return Response({ 'detail': 'Password is incorrect.' }, status=status.HTTP_401_UNAUTHORIZED)
         
-        serializer = serializers.UserSerializer(instance=user)
-
-        # generating simplejwt tokens
         tokens = RefreshToken.for_user(user)
-
         tokens['is_email_confirmed'] = user.is_email_confirmed
         tokens['is_admin'] = user.is_staff
         
-        refresh_token = str(tokens)
-        access_token = str(tokens.access_token)
-
         return Response({
-            'access_token': access_token,
-            'refresh_token': refresh_token,
+            'access_token': str(tokens.access_token),
+            'refresh_token': str(tokens)
         })
 
 class ActivateAccountAPIView(views.APIView):
@@ -100,15 +72,6 @@ class ActivateAccountAPIView(views.APIView):
 class LogoutAPIView(views.APIView):
     def post(self, request):
         serializer = serializers.LogoutSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                { 'detail': 'Logout has been succesfully accomplished.' }, 
-                status=status.HTTP_200_OK
-            )
-        else:
-            return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({ 'detail': 'Logout has been successfully accomplished.' }, status=status.HTTP_200_OK)
