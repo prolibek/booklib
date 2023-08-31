@@ -37,7 +37,12 @@ const Header = () => {
             />
             <div className={styles.navRows}>
                 <Link to="" className={styles.navText}>Библиотека</Link>
-                <Link to="/admin/" className={styles.navText}>Админка</Link>
+                { authState.isAdmin &&
+                    <Link 
+                        to="/admin/" 
+                        className={styles.navText}
+                    >Админка</Link> 
+                }
             </div>
             <p className={styles.navText}>
                 {authState.isAuthenticated ? (

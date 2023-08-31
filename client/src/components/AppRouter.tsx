@@ -19,6 +19,7 @@ const AppRouter = () => {
             }
             {
                 authState.isAuthenticated &&
+                authState.isAdmin &&
                 adminRoutes.map((route) =>
                     <Route
                         path={route.path}

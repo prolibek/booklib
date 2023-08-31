@@ -28,6 +28,9 @@ class RegisterAPIView(views.APIView):
 
                 tokens = RefreshToken.for_user(user)
 
+                tokens['is_email_confirmed'] = user.is_email_confirmed
+                tokens['is_admin'] = user.is_staff
+
                 data['refresh_token'] = str(tokens)
                 data['access_token'] = str(tokens.access_token)
 
@@ -62,12 +65,15 @@ class LoginAPIView(views.APIView):
         # generating simplejwt tokens
         tokens = RefreshToken.for_user(user)
 
+        tokens['is_email_confirmed'] = user.is_email_confirmed
+        tokens['is_admin'] = user.is_staff
+        
         refresh_token = str(tokens)
         access_token = str(tokens.access_token)
 
         return Response({
             'access_token': access_token,
-            'refresh_token': refresh_token
+            'refresh_token': refresh_token,
         })
 
 class ActivateAccountAPIView(views.APIView):
